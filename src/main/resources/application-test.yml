@@ -1,0 +1,77 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/fjnu_tss?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password:
+
+  redis:
+    port: 6379
+#  session:
+#    store-type: none
+
+
+server:
+  port: 8085
+
+
+custom:
+  authorize:
+    super-user: true #是否开启超级管理用户，默认为false即不开启。如果开启数据库中需要sys_super_user表，该表中的用户拥有所有系统权限
+  # dataCenter config
+  datacenter:
+    ignoring-uri:  /addStudentInfo,/common/addStudentInfo,/addGrade,/addSingleGrade,/exam/downloadStudentSignExcel,/exam/downloadJobCostExcel,/exam/downloadJobSignIn,/collegeProctorManagement/downloadSubmitPerson #datacenter不拦截的URI，支持*通配，多个URI使用,分隔，放过的业务URI需自行初始化数据中心
+  xss:
+    ignoring-uri:   #xss不拦截的URI，支持*通配，多个URI使用,分隔，放过的业务URI需自行初始化数据中心
+  # security config
+  security:
+    authorize-request:
+      unblocked-uri:  /studentSign/**,/exam/getCheckInExam,/exam/getExamPlaceByExamId,/exam/kaoWuSignIn,/exam/kaoWuPersonInfo,/scoreQuery,/gradeManagement/searchGradeCondition,/dataKeep/searchDictionary,/classInfoManagement/seachByCondition,/dataKeep/searchPost,/departmentManagement/departmentListFromDict,/system/role/searchRoleClass,/code # Spring Security过滤但不不拦截的URI，支持*通配，多个URI使用,分隔，用于业务URI的放行配置
+      web-ignoring-uri: /image/**,/fonts/** # 完全不经过Spring Security的URI配置，支持*统配，多个URI使用,分隔，用于静态资源URI的放行配置
+    code:
+      image:    #图形验证码
+        length: 4
+        width: 80
+        height: 38
+        expireIn: 60
+        url:  /scoreQuery,/studentSign/logOn #需要图形验证码验证的url配置 支持* 多个url使用,分隔 默认设置/authentication/form
+      sms:     #手机验证码
+        length: 6
+        expire-in: 60
+        url:    #需要手机验证码验证的url配置 支持* 多个url使用,分隔 默认设置/authentication/mobile
+    oauth2:
+      clients[0]:
+        client-id: byqj
+        client-secret: byqj
+        access-token-validate-seconds: 9999
+      clients[1]:
+        client-id: test
+        client-secret: test
+        access-token-validate-seconds: 4000
+      token-store: redis
+
+application:
+  version: test
+logging:
+  level:
+    com: debug
+
+mybatis-plus:
+  type-enums-package: com.byqj.security.rbac.enums;com.byqj.security.rbac.enums
+
+file-path:
+  export-file-local-path: /Users/czx/work/temp/fjnu/
+  download-file-web-path: http://s.ptms.willim.top/sm-ptms-file/upload/
+  student-sign-table-file-path: studentSignTable/ #考生签到
+  card-for-exam-file-path: cardForExam/ #准考证
+  post-notice-list-file-path: postNoticeList/ #岗位通知单
+  submit-person-excel-file-save: D:\test\submitperson  #岗位报名表存储地址
+  job-sign-in-file-save: jobSign\ #岗位签到
+  job-cost-file-save:  jobCost\ #下载岗位人员费用表
+  download-grade-template: D:\test\ #成绩管理下载成绩导入的模板
+  account-table: accountTable/ #
+
+user:
+  init-password: 123456
+
+encode-role: FJNUtss2019 #身份证加密规则

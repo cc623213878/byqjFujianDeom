@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    #    active: prod #发布版
+    active: dev  #开发版 远程库
+  #    active: test  #测试版 本地库
+  #  null 不返回
+  jackson:
+    default-property-inclusion: non_null
